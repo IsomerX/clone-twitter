@@ -3,7 +3,6 @@ import { DotsHorizontalIcon } from "@heroicons/react/outline";
 import React from "react";
 
 const Post = ({ id, post, postPage }) => {
-    console.log(post)
     return (
         <div className="p-3 flex cursor-pointer border-b border-gray-700">
             {!postPage && (
