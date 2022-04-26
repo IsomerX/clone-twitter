@@ -11,7 +11,6 @@ const Post = ({ id, post, postPage }) => {
                     className="h-11 w-11 rounded-full mr-4"
                 />
             )}
-            {console.log(post)}
             <div className="flex flex-col space-y-2 w-full">
                 <div className={`flex ${!postPage && "justify-between"}`}>
                     {postPage && (
