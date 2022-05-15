@@ -2,6 +2,11 @@
 import {
     deleteDoc,
     doc,
+    onSnapshot,
+    query,
+    collection,
+    orderBy,
+    setDoc,
 } from "@firebase/firestore";
 import {
     ChartBarIcon,
@@ -18,19 +23,62 @@ import {
 } from "@heroicons/react/solid";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { db } from "../firebase";
+import Moment from "react-moment";
+import { useRecoilState } from "recoil";
+import { modalState, postIdState } from "../atoms/modalAtom";
 
 const Post = ({ id, post, postPage }) => {
     const { data: session } = useSession();
+    const [isOpen, setIsOpen] = useRecoilState(modalState);
+    const [postId, setPostId] = useRecoilState(postIdState);
 
     const [comments, setComments] = useState([]);
     const [likes, setLikes] = useState([]);
     const [liked, setLiked] = useState(false);
     const router = useRouter();
 
+    useEffect(() => {
+        onSnapshot(
+            query(
+                collection(db, "posts", id, "comments"),
+                orderBy("timestamp", "desc")
+            ),
+            (snapshot) => {
+                setComments(snapshot.docs);
+            }
+        );
+    }, [id]);
+
+    useEffect(() => {
+        onSnapshot(collection(db, "posts", id, "likes"), (snapshot) => {
+            setLikes(snapshot.docs);
+        });
+    }, [id]);
+
+    useEffect(() => {
+        setLiked(
+            likes.findIndex((like) => like.id === session?.user?.uid) !== -1
+        );
+    }, [likes, session]);
+
+    const likePost = async () => {
+        console.log("Asd");
+        if (liked) {
+            await deleteDoc(doc(db, "posts", id, "likes", session.user.uid));
+        } else {
+            await setDoc(doc(db, "posts", id, "likes", session.user.uid), {
+                username: session.user.name,
+            });
+        }
+    };
+
     return (
-        <div className="p-3 flex cursor-pointer border-b border-gray-700">
+        <div
+            className="p-3 flex cursor-pointer border-b border-gray-700"
+            onClick={() => router.push(`/${id}`)}
+        >
             {!postPage && (
                 <img
                     src={post?.userImg}
@@ -67,7 +115,7 @@ const Post = ({ id, post, postPage }) => {
                         </div>{" "}
                         ·{" "}
                         <span className="hover:underline text-sm sm:text-[15px]">
-                            {/* <Moment fromNow>{post?.timestamp?.toDate()}</Moment> */}
+                            <Moment fromNow>{post?.timestamp?.toDate()}</Moment>
                         </span>
                         {!postPage && (
                             <p className="text-[#d9d9d9] text-[15px] sm:text-base mt-0.5">
