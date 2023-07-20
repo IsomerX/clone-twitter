@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useRecoilState } from "recoil";
 import { modalState, postIdState } from "../atoms/modalAtom";
 import { Dialog, Transition } from "@headlessui/react";
@@ -32,8 +33,7 @@ function Modal() {
     useEffect(
         () =>
             onSnapshot(doc(db, "posts", postId), (snapshot) => {
-                console.log(snapshot.docs);
-                setPost(snapshot.docs);;
+                setPost(snapshot.data());
             }),
         [postId]
     );
@@ -90,19 +90,19 @@ function Modal() {
                                     className="hoverAnimation w-9 h-9 flex items-center justify-center xl:px-0"
                                     onClick={() => setIsOpen(false)}
                                 >
-                                    <XIcon className="h-[22px] text-white" />
+                                    <XIcon className="h-[22px] text-white " />
                                 </div>
                             </div>
-                            <div className="flex px-4 pt-5 pb-2.5 sm:px-6">
+                            <div className="px-4 pt-5 pb-2.5 sm:px-6">
                                 <div className="w-full">
-                                    <div className="text-[#6e767d] flex gap-x-3 relative">
+                                    <div className="text-[#6e767d] flex gap-x-3 relative max-w-full">
                                         <span className="w-0.5 h-full z-[-1] absolute left-5 top-11 bg-gray-600" />
                                         <img
                                             src={post?.userImg}
                                             alt=""
                                             className="h-11 w-11 rounded-full"
                                         />
-                                        <div>
+                                        <div className="max-w-full">
                                             <div className="inline-block group">
                                                 <h4 className="font-bold text-[#d9d9d9] inline-block text-[15px] sm:text-base">
                                                     {post?.username}
@@ -117,7 +117,7 @@ function Modal() {
                                                     {post?.timestamp?.toDate()}
                                                 </Moment>
                                             </span>
-                                            <p className="text-[#d9d9d9] text-[15px] sm:text-base">
+                                            <p className="text-[#d9d9d9] text-[15px] sm:text-base w-full break-all">
                                                 {post?.text}
                                             </p>
                                         </div>
