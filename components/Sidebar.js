@@ -39,7 +39,10 @@ const Sidebar = () => {
             <button className="hidden xl:inline ml-auto bg-[#1d9bf0] text-white rounded-full w-56 h-[52px] text-lg font-bold shadow-md hover:bg-[#1a8cd8]">
                 Tweet
             </button>
-            <div className="text-[#d9d9d9] flex items-center justify-center mt-auto hoverAnimation xl:ml-auto xl:-mr-5" onClick={signOut}>
+            <div
+                className="text-[#d9d9d9] flex items-center justify-center mt-auto hoverAnimation xl:ml-auto xl:-mr-5"
+                onClick={signOut}
+            >
                 <img
                     src={session.user.image}
                     alt=""

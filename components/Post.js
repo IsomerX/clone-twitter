@@ -128,7 +128,7 @@ const Post = ({ id, post, postPage }) => {
                     </div>
                 </div>
                 {postPage && (
-                    <p className="text-[#d9d9d9] text-[15px] sm:text-base mt-0.5">
+                    <p className="text-[#d9d9d9] text-[15px] sm:text-base mt-0.5 break-all">
                         {post?.text}
                     </p>
                 )}
